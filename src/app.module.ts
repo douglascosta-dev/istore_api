@@ -20,6 +20,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
         synchronize: false,
+        migrationsRun: false,
       }),
     }),
   ],
