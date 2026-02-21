@@ -4,24 +4,30 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  OneToMany,
+  Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity('roles')
-export class Role {
+@Entity('cellphones')
+export class Cellphone {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({
     type: 'varchar',
-    length: 25,
-    unique: true,
+    length: 20,
     nullable: false,
   })
-  name: string;
-  @OneToMany(() => User, (user) => user.role)
-  users: User[];
+  number: string;
+  @Index()
+  @ManyToOne(() => User, (user) => user.cellphones, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
   @CreateDateColumn({
     name: 'created_at',
   })

@@ -1,35 +1,41 @@
+import { Address } from 'src/modules/address/entities/address.entity';
+import { Cellphone } from 'src/modules/cellphones/entities/cellphone.entity';
 import { Role } from 'src/modules/roles/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('users', {
   orderBy: {
-    first_name: 'ASC',
+    firstName: 'ASC',
   },
 })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({
+    name: 'first_name',
     type: 'varchar',
     length: 255,
     nullable: false,
   })
-  first_name: string;
+  firstName: string;
   @Column({
+    name: 'last_name',
     type: 'varchar',
     length: 255,
     nullable: false,
   })
-  last_name: string;
+  lastName: string;
   @Column({
     type: 'varchar',
     length: 255,
@@ -37,6 +43,14 @@ export class User {
     nullable: false,
   })
   email: string;
+  @OneToMany(() => Cellphone, (cellphone) => cellphone.user, {
+    cascade: true,
+  })
+  cellphones: Cellphone[];
+  @OneToMany(() => Address, (address) => address.user, {
+    cascade: true,
+  })
+  address: Address[];
   @Column({
     type: 'varchar',
     length: 11,
@@ -45,28 +59,30 @@ export class User {
   })
   cpf: string;
   @Column({
-    type: 'varchar',
-    length: 11,
-    nullable: false,
-  })
-  cellphone: string;
-  @Column({
+    name: 'password_hash',
     type: 'varchar',
     length: 255,
     nullable: false,
     select: false,
   })
-  password_hash: string;
+  passwordHash: string;
+  @Index()
   @ManyToOne(() => Role, {
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;
-  @CreateDateColumn()
-  created_at: Date;
-  @UpdateDateColumn()
-  updated_at: Date;
-  @DeleteDateColumn()
-  deleted_at: Date;
+  @CreateDateColumn({
+    name: 'created_at',
+  })
+  createdAt: Date;
+  @UpdateDateColumn({
+    name: 'updated_at',
+  })
+  updatedAt: Date;
+  @DeleteDateColumn({
+    name: 'deleted_at',
+  })
+  deletedAt: Date;
 }
