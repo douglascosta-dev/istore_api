@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
@@ -5,6 +6,7 @@ import {
   IsNotEmpty,
   IsString,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import { CreateAddressDTO } from 'src/modules/address/dto/create-adress.dto';
 import { CreateCellphoneDTO } from 'src/modules/cellphones/dto/create-cellphone.dto';
@@ -22,9 +24,13 @@ export class CreateUserDto {
   readonly email: string;
   @IsArray()
   @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateCellphoneDTO)
   readonly cellphones: CreateCellphoneDTO[];
   @IsArray()
   @IsNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateAddressDTO)
   readonly address: CreateAddressDTO[];
   @IsString()
   @IsNotEmpty()
