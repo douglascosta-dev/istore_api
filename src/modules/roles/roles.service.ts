@@ -24,6 +24,11 @@ export class RoleService {
     const skip = (page - 1) * safeLimit;
     const qb = this.roleRepository.createQueryBuilder('role');
 
+    if (query.name)
+      qb.andWhere('role.name ILIKE :name', {
+        name: `%${query.name}%`,
+      });
+
     qb.skip(skip).take(safeLimit);
 
     const [data, total] = await qb.getManyAndCount();

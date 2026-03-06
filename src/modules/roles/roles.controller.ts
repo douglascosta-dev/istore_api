@@ -1,4 +1,3 @@
-import { PaginatedResponse } from './../../../dist/common/interfaces/paginated-response.interface.d';
 import {
   Body,
   Controller,
@@ -17,6 +16,7 @@ import { RoleResponse } from './dto/role.response';
 import { RoleService } from './roles.service';
 import { plainToInstance } from 'class-transformer';
 import { UserResponse } from '../users/dto/user.response';
+import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
 
 @Controller('roles')
 export class RoleController {
