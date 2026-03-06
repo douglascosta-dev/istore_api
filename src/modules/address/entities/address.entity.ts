@@ -60,6 +60,7 @@ export class Address {
   state: string;
   @Column({
     type: 'boolean',
+    default: true,
   })
   default: boolean;
   @ManyToOne(() => User, (user) => user.address, {

@@ -27,4 +27,7 @@ export class CreateAddressDTO {
   @IsBoolean()
   @IsNotEmpty()
   readonly default: boolean;
+  @IsString()
+  @IsNotEmpty()
+  readonly userId: string;
 }
