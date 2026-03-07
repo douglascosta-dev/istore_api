@@ -16,8 +16,9 @@ import { CellphoneService } from './cellphones.service';
 import { plainToInstance } from 'class-transformer';
 import { CreateCellphoneDTO } from './dto/create-cellphone.dto';
 import { UpdateCellphoneDTO } from './dto/update-cellphone.dto';
+import { CellphoneUserResponse } from './dto/cellphone-users.response';
 
-@Controller('cellpones')
+@Controller('cellphones')
 export class CellphoneController {
   constructor(private readonly cellphoneService: CellphoneService) {}
   @Get()
@@ -33,12 +34,19 @@ export class CellphoneController {
     };
   }
 
+  @Get('/users')
+  async findOneWithUsers(
+    @Query() query: FindCellphoneQueryDTO,
+  ): Promise<PaginatedResponse<CellphoneUserResponse>> {
+    return await this.cellphoneService.findAllWithUsers(query);
+  }
+
   @Get(':id')
   async findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
-  ): Promise<CellphoneResponse> {
+  ): Promise<CellphoneUserResponse> {
     const cellphone = await this.cellphoneService.findOne(id);
-    return plainToInstance(CellphoneResponse, cellphone, {
+    return plainToInstance(CellphoneUserResponse, cellphone, {
       excludeExtraneousValues: true,
     });
   }

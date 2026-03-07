@@ -14,7 +14,7 @@ export class UserResponse {
   @Type(() => CellphoneResponse)
   readonly cellphones: CellphoneResponse[];
   @Expose()
-  @Type(() => CellphoneResponse)
+  @Type(() => AddressResponse)
   readonly address: AddressResponse[];
   @Expose()
   readonly cpf: string;

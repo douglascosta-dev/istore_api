@@ -85,7 +85,7 @@ export class CellphoneService {
     };
   }
 
-  async findOne(id: string): Promise<CellphoneResponse> {
+  async findOne(id: string): Promise<CellphoneUserResponse> {
     const address = await this.cellphoneRepository.findOne({
       where: {
         id,
@@ -99,7 +99,7 @@ export class CellphoneService {
         HttpStatus.NOT_FOUND,
       );
 
-    return plainToInstance(CellphoneResponse, address, {
+    return plainToInstance(CellphoneUserResponse, address, {
       excludeExtraneousValues: true,
     });
   }
