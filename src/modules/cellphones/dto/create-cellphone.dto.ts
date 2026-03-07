@@ -5,4 +5,7 @@ export class CreateCellphoneDTO {
   @IsNotEmpty()
   @MaxLength(20)
   readonly number: string;
+  @IsString()
+  @IsNotEmpty()
+  readonly userId: string;
 }

@@ -1,10 +1,13 @@
 import { Expose } from 'class-transformer';
 
-export class CellphoneResponse {
+export class CellphoneUserResponse {
   @Expose()
   readonly id: string;
   @Expose()
   readonly number: string;
   @Expose()
-  readonly userId?: string;
+  readonly user?: {
+    id: string;
+    name: string;
+  };
 }

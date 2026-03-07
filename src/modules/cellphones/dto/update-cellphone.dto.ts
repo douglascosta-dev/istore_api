@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCellphoneDTO } from './create-cellphone.dto';
+import { IsString, IsNotEmpty, MaxLength } from 'class-validator';
 
-export class UpdateCellphoneDTO extends PartialType(CreateCellphoneDTO) {}
+export class UpdateCellphoneDTO {
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(20)
+  readonly number: string;
+}
