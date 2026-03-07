@@ -2,6 +2,8 @@ import { Expose } from 'class-transformer';
 
 export class AddressResponse {
   @Expose()
+  readonly id: string;
+  @Expose()
   readonly zipcode: string;
   @Expose()
   readonly street: string;

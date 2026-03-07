@@ -1,6 +1,6 @@
 import { Expose, Type } from 'class-transformer';
 import { AddressResponse } from 'src/modules/address/dto/address.response';
-import { CellphonResponse } from 'src/modules/cellphones/dto/cellphone.response';
+import { CellphoneResponse } from 'src/modules/cellphones/dto/cellphone.response';
 import { RoleEnum } from 'src/modules/roles/enuns/role.enum';
 
 export class UserResponse {
@@ -11,10 +11,10 @@ export class UserResponse {
   @Expose()
   readonly email: string;
   @Expose()
-  @Type(() => CellphonResponse)
-  readonly cellphones: CellphonResponse[];
+  @Type(() => CellphoneResponse)
+  readonly cellphones: CellphoneResponse[];
   @Expose()
-  @Type(() => CellphonResponse)
+  @Type(() => CellphoneResponse)
   readonly address: AddressResponse[];
   @Expose()
   readonly cpf: string;
