@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Cellphone } from './entities/cellphone.entity';
 import { Repository } from 'typeorm';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
-import { CellphoneResponse } from './dto/cellphone.response';
 import { FindCellphoneQueryDTO } from './dto/find-cellphone-query.dto';
 import { buildPaginatedResponse } from 'src/common/helpers/pagination.helper';
 import { User } from '../users/entities/user.entity';
@@ -23,7 +22,7 @@ export class CellphoneService {
 
   async findAll(
     query: FindCellphoneQueryDTO,
-  ): Promise<PaginatedResponse<CellphoneResponse>> {
+  ): Promise<PaginatedResponse<Cellphone>> {
     const { page = 1, limit = 300 } = query;
     const safeLimit = Math.min(limit, 100);
     const skip = (page - 1) * safeLimit;
@@ -85,26 +84,24 @@ export class CellphoneService {
     };
   }
 
-  async findOne(id: string): Promise<CellphoneUserResponse> {
-    const address = await this.cellphoneRepository.findOne({
+  async findOne(id: string): Promise<Cellphone> {
+    const cellphone = await this.cellphoneRepository.findOne({
       where: {
         id,
       },
       relations: ['user'],
     });
 
-    if (!address)
+    if (!cellphone)
       throw new HttpException(
         'Nenhum telefone encontrado',
         HttpStatus.NOT_FOUND,
       );
 
-    return plainToInstance(CellphoneUserResponse, address, {
-      excludeExtraneousValues: true,
-    });
+    return cellphone;
   }
 
-  async createOne(body: CreateCellphoneDTO): Promise<CellphoneResponse> {
+  async createOne(body: CreateCellphoneDTO): Promise<Cellphone> {
     const user = await this.userRepository.findOne({
       where: {
         id: body.userId,
@@ -125,10 +122,7 @@ export class CellphoneService {
     return await this.cellphoneRepository.save(cellphone);
   }
 
-  async updateOne(
-    id: string,
-    body: UpdateCellphoneDTO,
-  ): Promise<CellphoneResponse> {
+  async updateOne(id: string, body: UpdateCellphoneDTO): Promise<Cellphone> {
     const cellphone = await this.cellphoneRepository.findOne({
       where: { id },
     });

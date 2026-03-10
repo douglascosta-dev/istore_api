@@ -20,5 +20,7 @@ export class AddressResponse {
   @Expose()
   readonly default: boolean;
   @Expose()
+  readonly userId: string;
+  @Expose()
   readonly createdAt: Date;
 }

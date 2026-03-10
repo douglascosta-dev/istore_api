@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Address } from './entities/address.entity';
 import { Repository } from 'typeorm';
 import { FindAddressQueryDTO } from './dto/find-address-query.dto';
-import { AddressResponse } from './dto/address.response';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
 import { buildPaginatedResponse } from 'src/common/helpers/pagination.helper';
 import { CreateAddressDTO } from './dto/create-adress.dto';
@@ -67,7 +66,7 @@ export class AddressService {
     throw new HttpException('Nenhum endereço encontrado', HttpStatus.NOT_FOUND);
   }
 
-  async findOne(id: string): Promise<AddressResponse> {
+  async findOne(id: string): Promise<Address> {
     const address = await this.addressRepository.findOne({
       where: {
         id,
@@ -81,7 +80,7 @@ export class AddressService {
     );
   }
 
-  async createOne(body: CreateAddressDTO): Promise<AddressResponse> {
+  async createOne(body: CreateAddressDTO): Promise<Address> {
     const user = await this.userRepository.findOne({
       where: {
         id: body.userId,
@@ -96,7 +95,7 @@ export class AddressService {
     return await this.addressRepository.save(address);
   }
 
-  async updateOne(id: string, body: UpdateAdressDTO): Promise<AddressResponse> {
+  async updateOne(id: string, body: UpdateAdressDTO): Promise<Address> {
     const updateAdress = await this.addressRepository.preload({
       id: id,
       ...body,
