@@ -16,9 +16,6 @@ export class UpdateUserDTO {
   @IsArray()
   @IsOptional()
   readonly address: UpdateAdressDTO[];
-  @IsString()
-  @IsOptional()
-  readonly password: string;
   @IsEnum(RoleEnum)
   @IsOptional()
   readonly role: RoleEnum;

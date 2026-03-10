@@ -5,6 +5,8 @@ import { RoleEnum } from 'src/modules/roles/enuns/role.enum';
 
 export class UserResponse {
   @Expose()
+  id: string;
+  @Expose()
   readonly firstName: string;
   @Expose()
   readonly lastName: string;
