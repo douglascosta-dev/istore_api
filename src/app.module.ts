@@ -3,6 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserModule } from './modules/users/users.module';
+import { RoleModule } from './modules/roles/roles.module';
+import { CellphoneModule } from './modules/cellphones/cellphones.module';
+import { AddressModule } from './modules/address/address.module';
 
 @Module({
   imports: [
@@ -23,6 +27,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         migrationsRun: false,
       }),
     }),
+    RoleModule,
+    UserModule,
+    CellphoneModule,
+    AddressModule,
   ],
   controllers: [AppController],
   providers: [AppService],
