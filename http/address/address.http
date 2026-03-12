@@ -1,0 +1,45 @@
+@baseUrl = http://localhost:3000
+
+
+### AddresController
+# @name findAll
+GET {{baseUrl}}/address
+
+
+### AddresController
+# @name findOne
+GET {{baseUrl}}/address/4ca7f501-279c-43a0-b865-aeb1b8b39a91
+
+
+### AddresController
+# @name createOne
+POST {{baseUrl}}/address
+Content-Type: application/json
+
+{
+  "zipcode": "35701315",
+  "street": "Rua Andirá",
+  "number": 358,
+  "complement": "A",
+  "neighborhood": "Aeroporto",
+  "city": "Sete Lagoas",
+  "state": "MG",
+  "default": true,
+  "userId": "653292b9-2186-4773-b232-44034a0d3dcb"
+}
+
+
+### AddresController
+# @name updateOne
+PATCH {{baseUrl}}/address/4ca7f501-279c-43a0-b865-aeb1b8b39a91
+Content-Type: application/json
+
+{
+  "zipcode": "35700138"
+}
+
+
+### AddresController
+# @name deleteOne
+DELETE {{baseUrl}}/address/4ca7f501-279c-43a0-b865-aeb1b8b39a91
+Content-Type: application/json

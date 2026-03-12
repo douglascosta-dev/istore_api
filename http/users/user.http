@@ -1,0 +1,59 @@
+@baseUrl = http://localhost:3000
+
+
+### UserController
+# @name findAll
+GET {{baseUrl}}/users
+
+
+### UserController
+# @name findOne
+GET {{baseUrl}}/users/7f5b2fb0-4742-4901-a1e7-232c4882dc66
+
+
+### RoleController
+# @name createOne
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "firstName": "Teste",
+  "lastName": "User - 2",
+  "email": "testeUser2@email.com",
+  "cellphones": [
+    {
+      "number": "31995272168"
+    }
+  ],
+  "address": [
+    {
+      "zipcode": "35701315",
+      "street": "Avenida Professor Maurílio de Jesus Peixoto",
+      "number": 364,
+      "complement": "Casa 35",
+      "neighborhood": "Boa Vista",
+      "city": "Sete Lagoas",
+      "state": "MG",
+      "default": true
+    }
+  ],
+  "cpf": "13211111111",
+  "password": "123456",
+  "roleId": "22a54106-9c07-42ac-92a8-c8c0d29d0cd3"
+}
+
+
+### UserController
+# @name updateOne
+PATCH {{baseUrl}}/roles/97c4e935-0da1-4459-a027-fa2e95c34108
+Content-Type: application/json
+
+{
+  "name": "client-updated"
+}
+
+
+### UserController
+# @name deleteOne
+DELETE {{baseUrl}}/users/7f5b2fb0-4742-4901-a1e7-232c4882dc66
+Content-Type: application/json
