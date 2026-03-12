@@ -2,15 +2,14 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsString,
+  IsUUID,
   MaxLength,
   ValidateNested,
 } from 'class-validator';
 import { CreateAddressDTO } from 'src/modules/address/dto/create-adress.dto';
 import { CreateCellphoneDTO } from 'src/modules/cellphones/dto/create-cellphone.dto';
-import { RoleEnum } from 'src/modules/roles/enuns/role.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -39,7 +38,7 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   readonly password: string;
-  @IsEnum(RoleEnum)
+  @IsUUID()
   @IsNotEmpty()
-  readonly role: RoleEnum;
+  roleId: string;
 }

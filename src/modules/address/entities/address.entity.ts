@@ -1,4 +1,6 @@
 import { User } from 'src/modules/users/entities/user.entity';
+import { RelationId } from 'typeorm';
+
 import {
   Column,
   CreateDateColumn,
@@ -69,6 +71,8 @@ export class Address {
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+  @RelationId((address: Address) => address.user)
+  userId: string;
   @CreateDateColumn({
     name: 'created_at',
   })

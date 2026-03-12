@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { CellphoneUserDTO } from 'src/modules/users/dto/cellphone-user.dto';
 
 export class CellphoneUserResponse {
   @Expose()
@@ -6,8 +7,9 @@ export class CellphoneUserResponse {
   @Expose()
   readonly number: string;
   @Expose()
+  @Type(() => CellphoneUserDTO)
   readonly user?: {
     id: string;
-    name: string;
+    firstName: string;
   };
 }

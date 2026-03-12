@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateAddressDTO {
   @IsString()
@@ -13,8 +19,8 @@ export class CreateAddressDTO {
   @IsNotEmpty()
   readonly number: number;
   @IsString()
-  @IsNotEmpty()
-  readonly complement: string;
+  @IsOptional()
+  readonly complement?: string;
   @IsString()
   @IsNotEmpty()
   readonly neighborhood: string;

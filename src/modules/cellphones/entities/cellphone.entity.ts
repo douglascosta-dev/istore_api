@@ -8,6 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -28,6 +29,8 @@ export class Cellphone {
   })
   @JoinColumn({ name: 'user_id' })
   user: User;
+  @RelationId((cellphone: Cellphone) => cellphone.user)
+  userId: string;
   @CreateDateColumn({
     name: 'created_at',
   })

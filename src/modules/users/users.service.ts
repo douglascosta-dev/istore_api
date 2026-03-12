@@ -70,7 +70,7 @@ export class UserService {
   async createOne(body: CreateUserDto): Promise<User> {
     const passwordHash = await bcrypt.hash(body.password, 10);
     const role = await this.roleRepository.findOne({
-      where: { name: body.role },
+      where: { id: body.roleId },
     });
     if (!role) {
       throw new HttpException('Role inválida', HttpStatus.BAD_REQUEST);
@@ -121,7 +121,7 @@ export class UserService {
     });
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
-    return await this.userRepository.delete(user);
+    return await this.userRepository.remove(user);
   }
 
   async changeUserPassword(

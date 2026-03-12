@@ -1,7 +1,8 @@
 import { Expose, Type } from 'class-transformer';
+import { IsUUID } from 'class-validator';
 import { AddressResponse } from 'src/modules/address/dto/address.response';
 import { CellphoneResponse } from 'src/modules/cellphones/dto/cellphone.response';
-import { RoleEnum } from 'src/modules/roles/enuns/role.enum';
+import { RoleResponse } from 'src/modules/roles/dto/role.response';
 
 export class UserResponse {
   @Expose()
@@ -21,7 +22,9 @@ export class UserResponse {
   @Expose()
   readonly cpf: string;
   @Expose()
-  readonly role: RoleEnum;
+  @IsUUID()
+  @Type(() => RoleResponse)
+  readonly role: RoleResponse;
   @Expose()
   readonly createdAt: Date;
 }
