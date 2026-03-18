@@ -23,8 +23,8 @@ export class RolePermission {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'role_id' })
-  role: Role;
   @Index()
+  role: Role;
   @RelationId((rp: RolePermission) => rp.role)
   roleId: string;
   @ManyToOne(() => Permission, {
@@ -32,8 +32,8 @@ export class RolePermission {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'permission_id' })
-  permission: Permission;
   @Index()
+  permission: Permission;
   @RelationId((rp: RolePermission) => rp.permission)
   permissionId: string;
   @CreateDateColumn({
