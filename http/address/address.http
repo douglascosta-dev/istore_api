@@ -19,13 +19,13 @@ Content-Type: application/json
 {
   "zipcode": "35701315",
   "street": "Rua Andirá",
-  "number": 358,
-  "complement": "A",
+  "number": 0,
+  "complement": "",
   "neighborhood": "Aeroporto",
   "city": "Sete Lagoas",
   "state": "MG",
   "default": true,
-  "userId": "653292b9-2186-4773-b232-44034a0d3dcb"
+  "userId": "c6740949-5a21-4510-a035-47c0a8d1b61a"
 }
 
 

@@ -8,8 +8,8 @@ import {
   MaxLength,
   ValidateNested,
 } from 'class-validator';
-import { CreateAddressDTO } from 'src/modules/address/dto/create-adress.dto';
-import { CreateCellphoneDTO } from 'src/modules/cellphones/dto/create-cellphone.dto';
+import { CreateAddressNestedDto } from 'src/modules/address/dto/create-address-nested.dto';
+import { CreateCellphoneNestedDto } from 'src/modules/cellphones/dto/create-cellphone-nested.dto';
 
 export class CreateUserDto {
   @IsString()
@@ -24,13 +24,13 @@ export class CreateUserDto {
   @IsArray()
   @IsNotEmpty()
   @ValidateNested({ each: true })
-  @Type(() => CreateCellphoneDTO)
-  readonly cellphones: CreateCellphoneDTO[];
+  @Type(() => CreateCellphoneNestedDto)
+  readonly cellphones: CreateCellphoneNestedDto[];
   @IsArray()
   @IsNotEmpty()
   @ValidateNested({ each: true })
-  @Type(() => CreateAddressDTO)
-  readonly address: CreateAddressDTO[];
+  @Type(() => CreateAddressNestedDto)
+  readonly address: CreateAddressNestedDto[];
   @IsString()
   @IsNotEmpty()
   @MaxLength(11)

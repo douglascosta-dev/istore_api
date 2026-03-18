@@ -8,8 +8,7 @@ GET {{baseUrl}}/users
 
 ### UserController
 # @name findOne
-GET {{baseUrl}}/users/7f5b2fb0-4742-4901-a1e7-232c4882dc66
-
+GET {{baseUrl}}/users/c6740949-5a21-4510-a035-47c0a8d1b61a
 
 ### RoleController
 # @name createOne
@@ -17,20 +16,20 @@ POST {{baseUrl}}/users
 Content-Type: application/json
 
 {
-  "firstName": "Teste",
-  "lastName": "User - 2",
-  "email": "testeUser2@email.com",
+  "firstName": "Douglas",
+  "lastName": "Costa",
+  "email": "douglas@email.com",
   "cellphones": [
     {
-      "number": "31995272168"
+      "number": "31999999999"
     }
   ],
   "address": [
     {
-      "zipcode": "35701315",
+      "zipcode": "35700138",
       "street": "Avenida Professor Maurílio de Jesus Peixoto",
-      "number": 364,
-      "complement": "Casa 35",
+      "number": 0,
+      "complement": "Casa Teste",
       "neighborhood": "Boa Vista",
       "city": "Sete Lagoas",
       "state": "MG",
