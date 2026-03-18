@@ -1,7 +1,6 @@
 import { Permission } from 'src/modules/permissions/entities/permission.entity';
 import { Role } from 'src/modules/roles/entities/role.entity';
 import {
-  Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
@@ -9,6 +8,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  RelationId,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
@@ -25,7 +25,7 @@ export class RolePermission {
   @JoinColumn({ name: 'role_id' })
   role: Role;
   @Index()
-  @Column({ name: 'role_id' })
+  @RelationId((rp: RolePermission) => rp.role)
   roleId: string;
   @ManyToOne(() => Permission, {
     onDelete: 'RESTRICT',
@@ -34,7 +34,7 @@ export class RolePermission {
   @JoinColumn({ name: 'permission_id' })
   permission: Permission;
   @Index()
-  @Column({ name: 'role_id' })
+  @RelationId((rp: RolePermission) => rp.permission)
   permissionId: string;
   @CreateDateColumn({
     name: 'created_at',
