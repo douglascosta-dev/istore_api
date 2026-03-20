@@ -45,10 +45,12 @@ export class User {
   email: string;
   @OneToMany(() => Cellphone, (cellphone) => cellphone.user, {
     cascade: true,
+    orphanedRowAction: 'soft-delete',
   })
   cellphones: Cellphone[];
   @OneToMany(() => Address, (address) => address.user, {
     cascade: true,
+    orphanedRowAction: 'soft-delete',
   })
   address: Address[];
   @Column({

@@ -10,7 +10,7 @@ GET {{baseUrl}}/users
 # @name findOne
 GET {{baseUrl}}/users/c6740949-5a21-4510-a035-47c0a8d1b61a
 
-### RoleController
+### UserController
 # @name createOne
 POST {{baseUrl}}/users
 Content-Type: application/json
