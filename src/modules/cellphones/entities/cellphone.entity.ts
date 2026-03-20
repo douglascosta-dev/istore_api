@@ -9,10 +9,12 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   RelationId,
+  Unique,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity('cellphones')
+@Unique(['user', 'number'])
 export class Cellphone {
   @PrimaryGeneratedColumn('uuid')
   id: string;
