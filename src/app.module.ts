@@ -8,6 +8,7 @@ import { RoleModule } from './modules/roles/roles.module';
 import { CellphoneModule } from './modules/cellphones/cellphones.module';
 import { AddressModule } from './modules/address/address.module';
 import { PermissionModule } from './modules/permissions/permissions.module';
+import { RolePermissionModule } from './modules/role_permissions/role-permission.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PermissionModule } from './modules/permissions/permissions.module';
     CellphoneModule,
     AddressModule,
     PermissionModule,
+    RolePermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

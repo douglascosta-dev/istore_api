@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:3000
+
+
+### RolePermissionController
+# @name findAll
+GET {{baseUrl}}/role-permissions
+
+
+### RolePermissionController
+# @name 
+GET {{baseUrl}}/role-permissions/548496c8-51ae-4692-b49c-e13f17c2f7d9
+
+
+### RolePermissionController
+# @name createOne
+POST {{baseUrl}}/role-permissions
+Content-Type: application/json
+
+{
+  "roleId": "f310b21b-a320-42d7-afe9-e23c723f61d0",
+  "permissionId": "fac6153d-26e4-4ab8-a449-bb295f83e175"
+}
+
+
+### RolePermissionController
+# @name updateOne
+PATCH {{baseUrl}}/role-permissions
+Content-Type: application/json
+
+{
+  "name": "client-updated"
+}
+
+
+### RolePermissionController
+# @name deleteOne
+DELETE {{baseUrl}}/role-permissions/7a578fbd-6d0d-4e07-8c17-d7925a9f8314
+Content-Type: application/json
