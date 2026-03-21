@@ -19,8 +19,12 @@ export class PasswordReset {
   user: User;
   @RelationId((userPassword: PasswordReset) => userPassword.user)
   userId: string;
-  @Column()
+  @Column({
+    name: 'reset_password_token_hash',
+  })
   resetPasswordTokenHash: string;
-  @Column()
+  @Column({
+    name: 'expires_at',
+  })
   expiresAt: Date;
 }
