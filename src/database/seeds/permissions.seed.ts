@@ -5,6 +5,9 @@ export async function runPermissionsSeeds() {
   const repository = AppDataSource.getRepository(Permission);
 
   const permissions: string[] = [
+    /* ALL */
+    '*',
+
     /* AUTH */
     'login:auth',
     'refresh:auth',
@@ -77,7 +80,7 @@ export async function runPermissionsSeeds() {
     'answer:ticket',
     'read:finance',
     'update:finance',
-  ] as const;
+  ];
   let hasCreatedPermission: boolean = false;
   for (const permission of permissions) {
     const existPermission: Permission | null = await repository.findOne({
