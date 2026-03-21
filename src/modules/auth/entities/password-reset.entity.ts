@@ -9,7 +9,7 @@ import {
   Unique,
 } from 'typeorm';
 
-@Entity('password-reset')
+@Entity('password_reset')
 @Unique(['user'])
 export class PasswordReset {
   @PrimaryGeneratedColumn('uuid')
