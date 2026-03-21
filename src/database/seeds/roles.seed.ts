@@ -3,7 +3,7 @@ import { AppDataSource } from '../data-source';
 
 export async function runRolesSeed() {
   const repository = AppDataSource.getRepository(Role);
-  const roles = [
+  const roles: Record<string, string>[] = [
     {
       name: 'admin',
     },
@@ -20,10 +20,18 @@ export async function runRolesSeed() {
       name: 'client',
     },
   ];
+  let hasCreatedRole: boolean = false;
   for (const role of roles) {
-    const existRole = await repository.findOne({
+    const existRole: Role | null = await repository.findOne({
       where: { name: role.name },
     });
-    if (!existRole) await repository.save(role);
+    if (!existRole) {
+      if (!hasCreatedRole) {
+        console.log('Roles:');
+        hasCreatedRole = true;
+      }
+      console.log(role);
+      await repository.save(role);
+    }
   }
 }
