@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3000
+
+
+### AuthController
+# @name changePassword
+PATCH  {{baseUrl}}/auth/973c2870-9b28-49f9-9357-1b4cd107eff8/change-password
+Content-Type: application/json
+
+{
+  "currentPassword": "999999999",
+  "newPassword": "123456789"
+}
+
+
+### AuthController
+# @name forgetPassword
+POST {{baseUrl}}/auth/forget-password
+Content-Type: application/json
+
+{
+  "email": "douglas@gmail.com"
+}
+
+
+### AuthController
+# @name resetPassword
+POST {{baseUrl}}/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "302fab21256bb27e6fcfabd56acd332b655a0b70ab7d75aa19b3ed9290122f54",
+  "tokenId": "cad453ee1a8de620aaed65b50e499030",
+  "newPassword": "999999999"
+}

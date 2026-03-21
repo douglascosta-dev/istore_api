@@ -8,7 +8,7 @@ GET {{baseUrl}}/users
 
 ### UserController
 # @name findOne
-GET {{baseUrl}}/users/c6740949-5a21-4510-a035-47c0a8d1b61a
+GET {{baseUrl}}/users/973c2870-9b28-49f9-9357-1b4cd107eff8
 
 ### UserController
 # @name createOne
@@ -18,7 +18,7 @@ Content-Type: application/json
 {
   "firstName": "Douglas",
   "lastName": "Costa",
-  "email": "douglas@email.com",
+  "email": "douglas@gmail.com",
   "cellphones": [
     {
       "number": "31999999999"
@@ -38,7 +38,7 @@ Content-Type: application/json
   ],
   "cpf": "13211111111",
   "password": "123456",
-  "roleId": "22a54106-9c07-42ac-92a8-c8c0d29d0cd3"
+  "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
 }
 
 

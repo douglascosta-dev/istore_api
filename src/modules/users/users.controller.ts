@@ -16,7 +16,6 @@ import { plainToInstance } from 'class-transformer';
 import { FindUserQueryDTO } from './dto/find-user-query.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
-import { ChangeUserPassword } from './dto/change-user-password.dto';
 
 @Controller('users')
 export class UserController {
@@ -61,14 +60,6 @@ export class UserController {
     return plainToInstance(UserResponse, user, {
       excludeExtraneousValues: true,
     });
-  }
-
-  @Patch(':id/reset-password')
-  async changeUserPassword(
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() body: ChangeUserPassword,
-  ) {
-    return this.userService.changeUserPassword(id, body);
   }
 
   @Delete(':id')

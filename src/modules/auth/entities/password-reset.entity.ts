@@ -20,7 +20,12 @@ export class PasswordReset {
   @RelationId((userPassword: PasswordReset) => userPassword.user)
   userId: string;
   @Column({
+    name: 'token_id',
+  })
+  tokenId: string;
+  @Column({
     name: 'reset_password_token_hash',
+    select: false,
   })
   resetPasswordTokenHash: string;
   @Column({

@@ -8,8 +8,8 @@ import { FindUserQueryDTO } from './dto/find-user-query.dto';
 import { buildPaginatedResponse } from 'src/common/helpers/pagination.helper';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
-import { ChangeUserPassword } from './dto/change-user-password.dto';
 import { Role } from '../roles/entities/role.entity';
+import { SelectQueryBuilder } from 'typeorm/browser';
 
 @Injectable()
 export class UserService {
@@ -21,10 +21,11 @@ export class UserService {
   ) {}
 
   async findAll(query: FindUserQueryDTO): Promise<PaginatedResponse<User>> {
-    const { page = 1, limit = 30 } = query;
-    const safeLimit = Math.min(limit, 100);
-    const skip = (page - 1) * safeLimit;
-    const qb = this.userRepository.createQueryBuilder('user');
+    const { page = 1 as number, limit = 30 as number } = query;
+    const safeLimit: number = Math.min(limit, 100);
+    const skip: number = (page - 1) * safeLimit;
+    const qb: SelectQueryBuilder<User> =
+      this.userRepository.createQueryBuilder('user');
 
     if (query.name) {
       qb.andWhere('user.firstName ILIKE :name', {
@@ -51,7 +52,7 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({
+    const user: User | null = await this.userRepository.findOne({
       where: {
         id,
       },
@@ -68,52 +69,57 @@ export class UserService {
   }
 
   async createOne(body: CreateUserDto): Promise<User> {
-    const passwordHash = await bcrypt.hash(body.password, 10);
-    const role = await this.roleRepository.findOne({
+    const passwordHash: string = await bcrypt.hash(body.password, 10);
+    const role: Role | null = await this.roleRepository.findOne({
       where: { id: body.roleId },
     });
+
     if (!role) {
       throw new HttpException('Role inválida', HttpStatus.BAD_REQUEST);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = body;
-    const user = this.userRepository.create({
+    const user: User = this.userRepository.create({
       ...userData,
       passwordHash,
       cellphones: body.cellphones,
       address: body.address,
       role: role,
     });
+
     if (!user)
       throw new HttpException('Falha ao criar usuário', HttpStatus.BAD_REQUEST);
+
     return await this.userRepository.save(user);
   }
 
   async updateOne(id: string, body: UpdateUserDTO): Promise<User> {
     let role: Role | undefined;
     if (body.role) {
-      const foundRole = await this.roleRepository.findOne({
+      const foundRole: Role | null = await this.roleRepository.findOne({
         where: { name: body.role },
       });
+
       if (!foundRole) {
         throw new HttpException('Role inválida', HttpStatus.BAD_REQUEST);
       }
       role = foundRole;
     }
 
-    const user = await this.userRepository.preload({
+    const user: User | undefined = await this.userRepository.preload({
       id: id,
       ...body,
       cellphones: body.cellphones,
       address: body.address,
       role: role,
     });
+
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
     return await this.userRepository.save(user);
   }
 
-  async deleteOne(id: string) {
+  async deleteOne(id: string): Promise<void> {
     const user = await this.userRepository.findOne({
       where: {
         id,
@@ -121,32 +127,7 @@ export class UserService {
     });
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
-    return await this.userRepository.remove(user);
-  }
 
-  async changeUserPassword(
-    id: string,
-    body: ChangeUserPassword,
-  ): Promise<void> {
-    const user = await this.userRepository.findOne({
-      where: {
-        id,
-      },
-      select: ['id', 'passwordHash'],
-    });
-    if (!user)
-      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
-
-    const passwordMatch = await bcrypt.compare(
-      body.currentPassword,
-      user.passwordHash,
-    );
-
-    if (!passwordMatch)
-      throw new HttpException('Senha atual incorreta', HttpStatus.BAD_REQUEST);
-
-    const newPasswordHash = await bcrypt.hash(body.newPassword, 10);
-    user.passwordHash = newPasswordHash;
-    await this.userRepository.save(user);
+    await this.userRepository.remove(user);
   }
 }
