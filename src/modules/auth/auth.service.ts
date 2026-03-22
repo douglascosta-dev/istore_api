@@ -90,7 +90,7 @@ export class AuthService {
         where: {
           tokenId: body.tokenId,
         },
-        select: ['id', 'user', 'resetPasswordTokenHash', 'expiresAt'],
+        select: ['id', 'user', 'userId', 'resetPasswordTokenHash', 'expiresAt'],
       });
 
     if (!passwordReset)
@@ -106,21 +106,23 @@ export class AuthService {
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
 
+    if (passwordReset.expiresAt < new Date())
+      throw new HttpException('Token expirado', HttpStatus.UNAUTHORIZED);
+
     const tokenMatch: boolean = await bcrypt.compare(
       body.token,
       passwordReset.resetPasswordTokenHash,
     );
 
-    if (passwordReset.expiresAt < new Date())
-      throw new HttpException('Token expirado', HttpStatus.UNAUTHORIZED);
-
     if (!tokenMatch)
       throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
 
     const newPasswordHash: string = await bcrypt.hash(body.newPassword, 10);
-    user.passwordHash = newPasswordHash;
 
-    await this.userRepository.save(user);
+    await this.userRepository.update(user.id, {
+      passwordHash: newPasswordHash,
+    });
+
     await this.passwordResetRepository.delete({
       user: { id: user.id },
     });
