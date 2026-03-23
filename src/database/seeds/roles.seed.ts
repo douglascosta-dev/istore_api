@@ -27,10 +27,9 @@ export async function runRolesSeed() {
     });
     if (!existRole) {
       if (!hasCreatedRole) {
-        console.log('Roles:');
+        console.log('Rodando Roles Seeds');
         hasCreatedRole = true;
       }
-      console.log(role);
       await repository.save(role);
     }
   }

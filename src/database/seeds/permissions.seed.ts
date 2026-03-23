@@ -78,6 +78,8 @@ export async function runPermissionsSeeds() {
     'update:ticket',
     'delete:ticket',
     'answer:ticket',
+
+    /* FINANCE */
     'read:finance',
     'update:finance',
   ];
@@ -88,13 +90,12 @@ export async function runPermissionsSeeds() {
     });
     if (!existPermission) {
       if (!hasCreatedPermission) {
-        console.log('Permissions:');
+        console.log('Rodando Permissions Seeds');
         hasCreatedPermission = true;
       }
       const payload: Record<string, string> = {
         name: permission,
       };
-      console.log(payload);
       await repository.save(payload);
     }
   }
