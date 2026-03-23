@@ -13,8 +13,8 @@ export function buildPaginatedResponse<T>(
       page,
       limit,
       totalPages,
-      hasPreviousPage: page > totalPages,
-      hasNextPage: page < 1,
+      hasPreviousPage: page > 1,
+      hasNextPage: page < totalPages,
     },
   };
 }

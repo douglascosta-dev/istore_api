@@ -6,6 +6,10 @@ import { Permission } from '../permissions/entities/permission.entity';
 import { Role } from '../roles/entities/role.entity';
 import { CreateRolePermissionDto } from './dto/create-role-permission.dto';
 import { UpdateRolePermissionDTO } from './dto/update-role-permission.dto';
+import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
+import { SelectQueryBuilder } from 'typeorm/browser';
+import { FindRolePermissionQueryDTO } from './dto/find-role-permission-query.dto';
+import { buildPaginatedResponse } from 'src/common/helpers/pagination.helper';
 
 @Injectable()
 export class RolePermissionService {
@@ -18,10 +22,36 @@ export class RolePermissionService {
     private readonly permissionRepository: Repository<Permission>,
   ) {}
 
-  async findAll(): Promise<RolePermission[]> {
-    const rolePermissions = await this.rolePermissionRepository.find({
-      relations: ['role', 'permission'],
-    });
+  async findAll(
+    query: FindRolePermissionQueryDTO,
+  ): Promise<PaginatedResponse<RolePermission>> {
+    const { page = 1 as number, limit = 30 as number } = query;
+    const safeLimit: number = Math.min(limit, 100);
+    const skip: number = (page - 1) * safeLimit;
+    const qb: SelectQueryBuilder<RolePermission> =
+      this.rolePermissionRepository.createQueryBuilder('role_permission');
+
+    qb.leftJoinAndSelect('role_permission.role', 'role').leftJoinAndSelect(
+      'role_permission.permission',
+      'permission',
+    );
+
+    if (query.name)
+      qb.andWhere('role.name ILIKE :name', {
+        name: `%${query.name}%`,
+      });
+
+    qb.skip(skip).take(safeLimit);
+
+    const [data, total] = await qb.getManyAndCount();
+
+    const rolePermissions = buildPaginatedResponse(
+      data,
+      page,
+      safeLimit,
+      total,
+    );
+
     if (!rolePermissions)
       throw new HttpException(
         'Nenhuma role_permission encontrada',

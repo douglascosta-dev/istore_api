@@ -7,21 +7,29 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { RolePermissionResponse } from './dto/role-permission.response';
 import { RolePermissionService } from './role-permission.service';
 import { plainToInstance } from 'class-transformer';
 import { CreateRolePermissionDto } from './dto/create-role-permission.dto';
+import { FindRolePermissionQueryDTO } from './dto/find-role-permission-query.dto';
+import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
 
 @Controller('role-permissions')
 export class RolePermissionController {
   constructor(private readonly rolePermissionService: RolePermissionService) {}
   @Get()
-  async findAll(): Promise<RolePermissionResponse[]> {
-    const rolePermissions = await this.rolePermissionService.findAll();
-    return plainToInstance(RolePermissionResponse, rolePermissions, {
-      excludeExtraneousValues: true,
-    });
+  async findAll(
+    @Query() query: FindRolePermissionQueryDTO,
+  ): Promise<PaginatedResponse<RolePermissionResponse>> {
+    const rolePermissions = await this.rolePermissionService.findAll(query);
+    return {
+      ...rolePermissions,
+      data: plainToInstance(RolePermissionResponse, rolePermissions.data, {
+        excludeExtraneousValues: true,
+      }),
+    };
   }
 
   @Get(':id')

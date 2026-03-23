@@ -3,7 +3,7 @@
 
 ### RolePermissionController
 # @name findAll
-GET {{baseUrl}}/role-permissions
+GET {{baseUrl}}/role-permissions?page=1&name=dev
 
 
 ### RolePermissionController
