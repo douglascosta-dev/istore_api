@@ -41,6 +41,37 @@ Content-Type: application/json
   "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
 }
 
+### UserController
+# @name createOne
+POST {{baseUrl}}/users/client
+Content-Type: application/json
+
+{
+  "firstName": "Letícia",
+  "lastName": "Macedo",
+  "email": "leticiamacedo@gmail.com",
+  "cellphones": [
+    {
+      "number": "31991111111"
+    }
+  ],
+  "address": [
+    {
+      "zipcode": "35701306",
+      "street": "Rua Guarapuava",
+      "number": 313,
+      "complement": "",
+      "neighborhood": "Aeroporto",
+      "city": "Sete Lagoas",
+      "state": "MG",
+      "default": true
+    }
+  ],
+  "cpf": "13222222222",
+  "password": "123456",
+  "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
+}
+
 
 ### UserController
 # @name updateOne

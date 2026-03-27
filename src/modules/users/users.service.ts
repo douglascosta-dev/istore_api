@@ -10,6 +10,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { Role } from '../roles/entities/role.entity';
 import { SelectQueryBuilder } from 'typeorm/browser';
+import { CreateClientUserDTO } from './create-client-user.dto';
 
 @Injectable()
 export class UserService {
@@ -93,6 +94,31 @@ export class UserService {
     return await this.userRepository.save(user);
   }
 
+  async createClient(body: CreateClientUserDTO): Promise<User> {
+    const clientRole: Role | null = await this.roleRepository.findOne({
+      where: { name: 'client' },
+    });
+
+    if (!clientRole)
+      throw new HttpException(
+        'Nenhuma role encontrada',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+
+    if (!body.password)
+      throw new HttpException('Senha é obrigatorio', HttpStatus.BAD_REQUEST);
+
+    const passwordHash: string = await bcrypt.hash(body.password, 10);
+    const user: User = this.userRepository.create({
+      ...body,
+      passwordHash: passwordHash,
+      cellphones: body.cellphones,
+      address: body.address,
+      role: clientRole,
+    });
+    return await this.userRepository.save(user);
+  }
+
   async updateOne(id: string, body: UpdateUserDTO): Promise<User> {
     let role: Role | undefined;
     if (body.role) {
@@ -124,6 +150,7 @@ export class UserService {
       where: {
         id,
       },
+      relations: ['cellphones', 'address'],
     });
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);

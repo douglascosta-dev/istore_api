@@ -16,6 +16,7 @@ import { plainToInstance } from 'class-transformer';
 import { FindUserQueryDTO } from './dto/find-user-query.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
+import { CreateClientUserDTO } from './create-client-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -46,6 +47,14 @@ export class UserController {
   @Post()
   async createOne(@Body() body: CreateUserDto): Promise<UserResponse> {
     const user = await this.userService.createOne(body);
+    return plainToInstance(UserResponse, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  @Post('client')
+  async createClient(@Body() body: CreateClientUserDTO): Promise<UserResponse> {
+    const user = await this.userService.createClient(body);
     return plainToInstance(UserResponse, user, {
       excludeExtraneousValues: true,
     });
