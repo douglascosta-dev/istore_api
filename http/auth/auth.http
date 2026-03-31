@@ -2,6 +2,17 @@
 
 
 ### AuthController
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "douglasgmail.com",
+  "password": "123456"
+}
+
+
+### AuthController
 # @name changePassword
 PATCH  {{baseUrl}}/auth/973c2870-9b28-49f9-9357-1b4cd107eff8/change-password
 Content-Type: application/json
@@ -28,7 +39,7 @@ POST {{baseUrl}}/auth/reset-password
 Content-Type: application/json
 
 {
-  "token": "302fab21256bb27e6fcfabd56acd332b655a0b70ab7d75aa19b3ed9290122f54",
-  "tokenId": "cad453ee1a8de620aaed65b50e499030",
-  "newPassword": "999999999"
+  "token": "106fa751b6715b8435b7fdbbb52566eb48906f689b96ad402f31d3755b5d8359",
+  "tokenId": "93e98fa8c974a713e0f9fa693be94370",
+  "newPassword": "123456"
 }

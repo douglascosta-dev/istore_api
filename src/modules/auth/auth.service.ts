@@ -13,6 +13,10 @@ import { randomBytes } from 'crypto';
 import { EmailService } from 'src/common/services/email.service';
 import { PasswordReset } from './entities/password-reset.entity';
 import { PasswordResetDTO } from './dtos/password-reset.dto';
+import { AccessTokenResponse } from './dtos/access-token.response';
+import { LoginDto } from './dtos/login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { CreateUserToken } from './dtos/create-user-token.dto';
 
 export class AuthService {
   constructor(
@@ -21,7 +25,44 @@ export class AuthService {
     @InjectRepository(PasswordReset)
     private readonly passwordResetRepository: Repository<PasswordReset>,
     private readonly emailService: EmailService,
+    private readonly jwtService: JwtService,
   ) {}
+
+  async login(body: LoginDto): Promise<AccessTokenResponse> {
+    if (!body.email)
+      throw new HttpException('Email é obrigatório', HttpStatus.BAD_REQUEST);
+
+    if (!body.password)
+      throw new HttpException('Senha é obrigatório', HttpStatus.BAD_REQUEST);
+
+    const user = await this.userRepository.findOne({
+      where: {
+        email: body.email,
+      },
+      select: ['id', 'email', 'passwordHash', 'firstName'],
+      relations: ['role'],
+    });
+
+    if (!user)
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+
+    const password: boolean = await bcrypt.compare(
+      body.password,
+      user.passwordHash,
+    );
+    if (!password)
+      throw new HttpException('Senha inválida', HttpStatus.UNAUTHORIZED);
+
+    const payload: CreateUserToken = {
+      id: user.id,
+      email: user.email,
+      role: user.role?.name,
+    };
+
+    const accessToken: string = this.jwtService.sign(payload);
+    return { accessToken: accessToken };
+  }
+
   async changePassword(id: string, body: ChangeUserPasswordDTO): Promise<void> {
     const user: User | null = await this.userRepository.findOne({
       where: {
@@ -90,7 +131,7 @@ export class AuthService {
         where: {
           tokenId: body.tokenId,
         },
-        select: ['id', 'user', 'userId', 'resetPasswordTokenHash', 'expiresAt'],
+        select: ['id', 'user', 'resetPasswordTokenHash', 'expiresAt'],
       });
 
     if (!passwordReset)

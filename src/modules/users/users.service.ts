@@ -28,10 +28,9 @@ export class UserService {
     const qb: SelectQueryBuilder<User> =
       this.userRepository.createQueryBuilder('user');
 
-    qb.leftJoinAndSelect('user.address', 'address').leftJoinAndSelect(
-      'user.cellphones',
-      'cellphones',
-    );
+    qb.leftJoinAndSelect('user.address', 'address')
+      .leftJoinAndSelect('user.cellphones', 'cellphones')
+      .leftJoinAndSelect('user.role', 'role');
 
     if (query.name) {
       qb.andWhere('user.firstName ILIKE :name', {
