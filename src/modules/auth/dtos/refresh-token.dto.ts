@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class AccessTokenDTO {
+export class RefreshTokenDTO {
   @IsString()
   @IsNotEmpty()
-  readonly accessToken: string;
+  readonly refreshToken: string;
 }

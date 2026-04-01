@@ -13,10 +13,11 @@ import { randomBytes } from 'crypto';
 import { EmailService } from 'src/common/services/email.service';
 import { PasswordReset } from './entities/password-reset.entity';
 import { PasswordResetDTO } from './dtos/password-reset.dto';
-import { AccessTokenResponse } from './dtos/access-token.response';
+import { TokenResponse } from './dtos/token.response';
 import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserToken } from './dtos/create-user-token.dto';
+import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 
 export class AuthService {
   constructor(
@@ -28,18 +29,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(body: LoginDto): Promise<AccessTokenResponse> {
+  async login(body: LoginDto): Promise<TokenResponse> {
     if (!body.email)
       throw new HttpException('Email é obrigatório', HttpStatus.BAD_REQUEST);
 
     if (!body.password)
       throw new HttpException('Senha é obrigatório', HttpStatus.BAD_REQUEST);
 
-    const user = await this.userRepository.findOne({
+    const user: User | null = await this.userRepository.findOne({
       where: {
         email: body.email,
       },
-      select: ['id', 'email', 'passwordHash', 'firstName'],
+      select: ['id', 'email', 'passwordHash', 'firstName', 'refreshToken'],
       relations: ['role'],
     });
 
@@ -59,8 +60,81 @@ export class AuthService {
       role: user.role?.name,
     };
 
-    const accessToken: string = this.jwtService.sign(payload);
-    return { accessToken: accessToken };
+    const accessToken: string = this.jwtService.sign(payload, {
+      secret: process.env.JWT_ACCESS,
+      expiresIn: '15m',
+    });
+
+    const refreshToken: string = this.jwtService.sign(payload, {
+      secret: process.env.JWT_REFRESH,
+      expiresIn: '7d',
+    });
+
+    const hashRefresh: string = await bcrypt.hash(refreshToken, 10);
+
+    await this.userRepository.update(user.id, {
+      refreshToken: hashRefresh,
+    });
+
+    return {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    } as TokenResponse;
+  }
+
+  async refreshToken(userToken: RefreshTokenDTO): Promise<TokenResponse> {
+    const token: string = userToken.refreshToken;
+    let payload: CreateUserToken;
+
+    try {
+      payload = this.jwtService.verify<CreateUserToken>(token, {
+        secret: process.env.JWT_REFRESH,
+      });
+    } catch {
+      throw new HttpException('Token inválido', HttpStatus.UNAUTHORIZED);
+    }
+
+    const user: User | null = await this.userRepository.findOne({
+      where: { id: payload.id },
+      select: ['id', 'email', 'firstName', 'refreshToken'],
+      relations: ['role'],
+    });
+
+    if (!user || !user.refreshToken) {
+      throw new HttpException('Não autorizado', HttpStatus.UNAUTHORIZED);
+    }
+
+    const validateToken: boolean = await bcrypt.compare(
+      userToken.refreshToken,
+      user.refreshToken,
+    );
+
+    if (!validateToken)
+      throw new HttpException('Não autorizado', HttpStatus.UNAUTHORIZED);
+
+    const newPayload: CreateUserToken = {
+      id: user.id,
+      email: user.email,
+      role: user.role?.name,
+    };
+
+    const newToken: string = this.jwtService.sign(newPayload, {
+      secret: process.env.JWT_ACCESS,
+      expiresIn: '15m',
+    });
+
+    const newRefresh: string = this.jwtService.sign(newPayload, {
+      secret: process.env.JWT_REFRESH,
+      expiresIn: '7d',
+    });
+
+    const newRefreshHash: string = await bcrypt.hash(newRefresh, 10);
+
+    await this.userRepository.update(user.id, {
+      refreshToken: newRefreshHash,
+    });
+
+    return { accessToken: newToken, refreshToken: newRefresh } as TokenResponse;
   }
 
   async changePassword(id: string, body: ChangeUserPasswordDTO): Promise<void> {

@@ -75,6 +75,11 @@ export class User {
   })
   @JoinColumn({ name: 'role_id' })
   role: Role;
+  @Column({
+    name: 'refresh_token',
+    nullable: true,
+  })
+  refreshToken?: string;
   @CreateDateColumn({
     name: 'created_at',
   })

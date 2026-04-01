@@ -1,6 +1,8 @@
 import { Expose } from 'class-transformer';
 
-export class AccessTokenResponse {
+export class TokenResponse {
   @Expose()
   readonly accessToken: string;
+  @Expose()
+  readonly refreshToken: string;
 }

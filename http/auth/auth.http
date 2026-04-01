@@ -7,8 +7,18 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "douglasgmail.com",
+  "email": "douglas@gmail.com",
   "password": "123456"
+}
+
+
+### AuthController
+# @name refreshToken
+POST {{baseUrl}}/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRkZjBlMTI2LTdiZDgtNDdhZS04YTYxLTg3ODllMzBmMmNkMiIsImVtYWlsIjoiZG91Z2xhc2Nvc3RhdGVpeGVpcmFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzc1MDc2ODI4LCJleHAiOjE3NzU2ODE2Mjh9.0nN5iWBRbu8hx59UxPbbtgYtttWLE8dvjr5P8772Pb0"
 }
 
 

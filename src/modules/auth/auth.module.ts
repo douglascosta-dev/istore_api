@@ -11,10 +11,7 @@ import 'dotenv/config';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, PasswordReset]),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '7d' },
-    }),
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
   providers: [AuthService, EmailService],
