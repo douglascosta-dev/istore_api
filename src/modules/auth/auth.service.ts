@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import {
   HttpException,
   HttpStatus,
+  Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ChangeUserPasswordDTO } from './dtos/change-password.dto';
@@ -19,6 +20,7 @@ import { JwtService } from '@nestjs/jwt';
 import { CreateUserToken } from './dtos/create-user-token.dto';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 
+@Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
