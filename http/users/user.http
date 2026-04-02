@@ -1,0 +1,89 @@
+@baseUrl = http://localhost:3000
+
+
+### UserController
+# @name findAll
+GET {{baseUrl}}/users
+
+
+### UserController
+# @name findOne
+GET {{baseUrl}}/users/973c2870-9b28-49f9-9357-1b4cd107eff8
+
+### UserController
+# @name createOne
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "firstName": "Douglas",
+  "lastName": "Costa",
+  "email": "douglas@gmail.com",
+  "cellphones": [
+    {
+      "number": "31999999999"
+    }
+  ],
+  "address": [
+    {
+      "zipcode": "35700138",
+      "street": "Avenida Professor Maurílio de Jesus Peixoto",
+      "number": 0,
+      "complement": "Casa Teste",
+      "neighborhood": "Boa Vista",
+      "city": "Sete Lagoas",
+      "state": "MG",
+      "default": true
+    }
+  ],
+  "cpf": "13211111111",
+  "password": "123456",
+  "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
+}
+
+### UserController
+# @name createOne
+POST {{baseUrl}}/users/client
+Content-Type: application/json
+
+{
+  "firstName": "Letícia",
+  "lastName": "Macedo",
+  "email": "leticiamacedo@gmail.com",
+  "cellphones": [
+    {
+      "number": "31991111111"
+    }
+  ],
+  "address": [
+    {
+      "zipcode": "35701306",
+      "street": "Rua Guarapuava",
+      "number": 313,
+      "complement": "",
+      "neighborhood": "Aeroporto",
+      "city": "Sete Lagoas",
+      "state": "MG",
+      "default": true
+    }
+  ],
+  "cpf": "13222222222",
+  "password": "123456",
+  "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
+}
+
+
+### UserController
+# @name updateOne
+PATCH {{baseUrl}}/roles/97c4e935-0da1-4459-a027-fa2e95c34108
+Content-Type: application/json
+
+{
+  "name": "client-updated"
+}
+
+
+### UserController
+# @name deleteOne
+DELETE {{baseUrl}}/users/7f5b2fb0-4742-4901-a1e7-232c4882dc66
+Content-Type: application/json

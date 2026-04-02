@@ -1,0 +1,36 @@
+@baseUrl = http://localhost:3000
+
+
+### PermissionController
+# @name findAll
+GET {{baseUrl}}/permissions
+
+
+### PermissionController
+# @name findOne
+GET {{baseUrl}}/permissions/88cb1f0e-5961-4696-9e85-c25263514021
+
+
+### PermissionController
+# @name createOne
+POST {{baseUrl}}/permissions
+Content-Type: application/json
+
+{
+  "name": "*"
+}
+
+
+### PermissionController
+# @name updateOne
+PATCH {{baseUrl}}/permissions/88cb1f0e-5961-4696-9e85-c25263514021
+Content-Type: application/json
+
+{
+  "name": "admin_permission"
+}
+
+
+### PermissionController
+# @name deleteOne
+DELETE {{baseUrl}}/permissions/88cb1f0e-5961-4696-9e85-c25263514021

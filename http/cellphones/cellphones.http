@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000
+
+
+### CellphoneController
+# @name findAll
+GET {{baseUrl}}/cellphones
+
+### CellphoneController
+# @name findAllWithUsers
+GET {{baseUrl}}/cellphones/users
+
+
+### CellphoneController
+# @name findOne
+GET {{baseUrl}}/cellphones/6a77c745-5de2-4b8b-b266-8884fc0ca889
+
+
+### CellphoneController
+# @name createOne
+POST {{baseUrl}}/cellphones
+Content-Type: application/json
+
+{
+  "number": "329952721661",
+  "userId": "653292b9-2186-4773-b232-44034a0d3dcb"
+}
+
+
+### CellphoneController
+# @name updateOne
+PATCH {{baseUrl}}/cellphones/6a77c745-5de2-4b8b-b266-8884fc0ca889
+Content-Type: application/json
+
+{
+  "number": "31995272168"
+}
+
+
+### CellphoneController
+# @name deleteOne
+DELETE {{baseUrl}}/cellphones
+Content-Type: application/json
