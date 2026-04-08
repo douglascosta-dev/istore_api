@@ -1,3 +1,4 @@
+import { UserResponse } from './../users/dto/user.response';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -15,10 +16,10 @@ import { EmailService } from 'src/common/services/email.service';
 import { PasswordReset } from './entities/password-reset.entity';
 import { PasswordResetDTO } from './dtos/password-reset.dto';
 import { TokenResponse } from './dtos/token.response';
-import { LoginDto } from './dtos/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserToken } from './dtos/create-user-token.dto';
 import { RefreshTokenDTO } from './dtos/refresh-token.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class AuthService {
@@ -31,16 +32,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(body: LoginDto): Promise<TokenResponse> {
-    if (!body.email)
+  async validadeUser(email: string, password: string): Promise<UserResponse> {
+    if (!email)
       throw new HttpException('Email é obrigatório', HttpStatus.BAD_REQUEST);
 
-    if (!body.password)
+    if (!password)
       throw new HttpException('Senha é obrigatório', HttpStatus.BAD_REQUEST);
 
     const user: User | null = await this.userRepository.findOne({
       where: {
-        email: body.email,
+        email: email,
       },
       select: ['id', 'email', 'passwordHash', 'firstName', 'refreshToken'],
       relations: ['role'],
@@ -49,17 +50,28 @@ export class AuthService {
     if (!user)
       throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
 
-    const password: boolean = await bcrypt.compare(
-      body.password,
+    const validatePassword: boolean = await bcrypt.compare(
+      password,
       user.passwordHash,
     );
-    if (!password)
+
+    if (!validatePassword)
       throw new HttpException('Senha inválida', HttpStatus.UNAUTHORIZED);
 
+    return plainToInstance(UserResponse, user, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  async login(user: UserResponse): Promise<TokenResponse> {
+    const userData: UserResponse = user;
+    if (!userData)
+      throw new HttpException('Usuário não encontrado', HttpStatus.NOT_FOUND);
+
     const payload: CreateUserToken = {
-      id: user.id,
-      email: user.email,
-      role: user.role?.name,
+      id: userData.id,
+      email: userData.email,
+      role: userData.role?.name,
     };
 
     const accessToken: string = this.jwtService.sign(payload, {
