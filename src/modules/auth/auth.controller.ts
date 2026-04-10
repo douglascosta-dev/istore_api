@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Param,
-  ParseUUIDPipe,
-  Patch,
-  Post,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ChangeUserPasswordDTO } from './dtos/change-password.dto';
 import { AuthService } from './auth.service';
 import { PasswordResetDTO } from './dtos/password-reset.dto';
@@ -16,6 +7,7 @@ import { RefreshTokenDTO } from './dtos/refresh-token.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserResponse } from '../users/dto/user.response';
 import { UserResquest } from './dtos/user-request.response';
+import { UserRequestToken } from './dtos/user-requet-token.response';
 
 @Controller('auth')
 export class AuthController {
@@ -38,11 +30,11 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Patch(':id/change-password')
   async changePassword(
-    @Param('id', new ParseUUIDPipe()) id: string,
+    @Request() req: UserRequestToken,
     @Body() body: ChangeUserPasswordDTO,
   ): Promise<void> {
+    const id = req.user.id;
     return await this.authService.changePassword(id, body);
   }
 
