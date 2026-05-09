@@ -8,6 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserResponse } from '../users/dto/user.response';
 import { UserResquest } from './dtos/user-request.response';
 import { UserRequestToken } from './dtos/user-requet-token.response';
+import { Public } from 'src/common/decorators/public-permission.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -37,12 +38,12 @@ export class AuthController {
     const id = req.user.id;
     return await this.authService.changePassword(id, body);
   }
-
+  @Public()
   @Post('forget-password')
   async forgetPassword(@Body('email') email: string): Promise<void> {
     return await this.authService.forgetPassword(email);
   }
-
+  @Public()
   @Post('reset-password')
   async resetPassword(@Body() body: PasswordResetDTO): Promise<void> {
     return await this.authService.resetPassword(body);
