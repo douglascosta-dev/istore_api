@@ -7,16 +7,21 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { PermissionResponse } from './dto/permission.response';
 import { PermissionService } from './permissions.service';
 import { plainToInstance } from 'class-transformer';
 import { CreatePermissionDTO } from './dto/create-permission.dto';
 import { UpdatePermissionDTO } from './dto/update-permission.dto';
-
+import { AuthGuard } from '@nestjs/passport';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
+import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
+@UseGuards(AuthGuard('jwt'), PermissionGuard)
 @Controller('permissions')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
+  @RequirePermissions('read:permission')
   @Get()
   async findall(): Promise<PermissionResponse[]> {
     const permissions = await this.permissionService.findAll();
@@ -24,7 +29,7 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('read:permission')
   @Get(':id')
   async findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -34,7 +39,7 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('create:permission')
   @Post()
   async createOne(
     @Body() body: CreatePermissionDTO,
@@ -44,7 +49,11 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions(
+    'read:permission',
+    'update:permission',
+    'create:permission',
+  )
   @Patch(':id')
   async updateOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -55,7 +64,11 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions(
+    'read:permission',
+    'update:permission',
+    'create:permission',
+  )
   @Delete(':id')
   async deleteOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.permissionService.deleteOne(id);
