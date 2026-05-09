@@ -1,98 +1,197 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# iStore API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+> ⚠️ **Projeto em construção** — esta API está em desenvolvimento ativo. Funcionalidades, contratos de endpoints e estrutura do banco podem mudar sem aviso até a primeira versão estável.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+API REST para gestão de e-commerce de eletrônicos, construída com [NestJS](https://nestjs.com/), [TypeORM](https://typeorm.io/) e PostgreSQL.
 
-## Description
+## Status
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+🚧 Em desenvolvimento — ainda não recomendado para uso em produção.
 
-## Project setup
+## Sumário
 
-```bash
-$ npm install
+- [Stack](#stack)
+- [Funcionalidades](#funcionalidades)
+- [Estrutura do projeto](#estrutura-do-projeto)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação](#instalação)
+- [Variáveis de ambiente](#variáveis-de-ambiente)
+- [Banco de dados](#banco-de-dados)
+- [Executando o projeto](#executando-o-projeto)
+- [Documentação da API](#documentação-da-api)
+- [Testes](#testes)
+- [Scripts disponíveis](#scripts-disponíveis)
+
+## Stack
+
+- **Runtime / Framework:** Node.js + NestJS 11
+- **Linguagem:** TypeScript
+- **ORM:** TypeORM
+- **Banco de dados:** PostgreSQL
+- **Autenticação:** JWT (Passport) + estratégia local
+- **Validação:** class-validator / class-transformer
+- **Documentação:** Swagger (OpenAPI)
+- **E-mail:** Nodemailer
+- **Hash de senha:** bcrypt
+
+## Funcionalidades
+
+- Autenticação com JWT (login, refresh token, esqueci/redefinir senha, alterar senha)
+- Controle de acesso baseado em **roles** (`admin`, `team`, `client`) e **permissions** granulares (`create:user`, `read:user`, etc.)
+- Guards de JWT e de permissões, com decorator `@Public()` para rotas abertas
+- CRUD de usuários, endereços, telefones, roles, permissions e role-permissions
+- Cadastro público de cliente (`POST /users/client`)
+- Paginação padronizada via helper e DTOs reutilizáveis
+- Migrations e seeds via TypeORM CLI
+- Envio de e-mail (recuperação de senha)
+
+## Estrutura do projeto
+
+```
+src/
+├── app.module.ts
+├── main.ts
+├── common/
+│   ├── constants/        # Listas de permissões por role (admin, team, seller, client, dev)
+│   ├── decorators/       # @Public, @RequirePermissions
+│   ├── dto/              # PaginationDTO
+│   ├── guards/           # JwtGuard, PermissionGuard
+│   ├── helpers/          # paginação, role-permission
+│   ├── interfaces/       # PaginatedResponse, PaginationMeta
+│   └── services/         # EmailService
+├── database/
+│   ├── data-source.ts
+│   ├── migrations/
+│   └── seeds/            # roles, permissions, role-permission, runner (seed.ts)
+└── modules/
+    ├── auth/             # login, refresh, change/forget/reset password
+    ├── users/
+    ├── roles/
+    ├── permissions/
+    ├── role_permissions/
+    ├── cellphones/
+    └── address/
 ```
 
-## Compile and run the project
+## Pré-requisitos
+
+- Node.js 20+
+- npm 10+
+- PostgreSQL 14+
+
+## Instalação
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone <repo-url>
+cd istore_api
+npm install
 ```
 
-## Run tests
+## Variáveis de ambiente
+
+Copie o arquivo de exemplo e preencha com seus valores:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Variáveis utilizadas:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+| Variável       | Descrição                                            |
+| -------------- | ---------------------------------------------------- |
+| `DB_HOST`      | Host do PostgreSQL                                   |
+| `DB_PORT`      | Porta do PostgreSQL (ex.: `5432`)                    |
+| `DB_USERNAME`  | Usuário do banco                                     |
+| `DB_PASSWORD`  | Senha do banco                                       |
+| `DB_NAME`      | Nome do banco                                        |
+| `JWT_SECRET`   | Segredo usado para assinar os tokens JWT             |
+| `JWT_ACCESS`   | Tempo de expiração do access token (ex.: `15m`)      |
+| `JWT_REFRESH`  | Tempo de expiração do refresh token (ex.: `7d`)      |
+| `EMAIL_USER`   | Usuário SMTP usado pelo Nodemailer                   |
+| `EMAIL_PASS`   | Senha/App password SMTP                              |
+| `PORT`         | (opcional) Porta da API. Padrão: `3000`              |
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Banco de dados
+
+O projeto usa migrations e seeds. `synchronize` está desabilitado — sempre rode as migrations.
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# Gerar uma nova migration a partir das entidades
+npm run migration:generate --name=NomeDaMigration
+
+# Aplicar as migrations pendentes
+npm run migration:run
+
+# Reverter a última migration
+npm run migration:revert
+
+# Popular tabelas iniciais (roles, permissions, role-permissions)
+npm run seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Executando o projeto
 
-## Resources
+```bash
+# desenvolvimento
+npm run start
 
-Check out a few resources that may come in handy when working with NestJS:
+# desenvolvimento com hot-reload
+npm run start:dev
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# debug
+npm run start:debug
 
-## Support
+# produção (após npm run build)
+npm run build
+npm run start:prod
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+A API sobe por padrão em `http://localhost:3000`.
 
-## Stay in touch
+## Documentação da API
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Após iniciar o servidor, a documentação Swagger fica disponível em:
 
-## License
+```
+http://localhost:3000/api
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+A pasta [http/](http/) contém arquivos `.http` (REST Client) com exemplos de requisições para cada módulo:
+
+- [http/auth/auth.http](http/auth/auth.http)
+- [http/users/user.http](http/users/user.http)
+- [http/roles/role.http](http/roles/role.http)
+- [http/permissions/permission.http](http/permissions/permission.http)
+- [http/role_permissions/role_permission.http](http/role_permissions/role_permission.http)
+- [http/cellphones/cellphones.http](http/cellphones/cellphones.http)
+- [http/address/address.http](http/address/address.http)
+
+## Testes
+
+```bash
+# unitários
+npm run test
+
+# watch
+npm run test:watch
+
+# cobertura
+npm run test:cov
+
+# end-to-end
+npm run test:e2e
+```
+
+## Scripts disponíveis
+
+| Script                  | Descrição                                  |
+| ----------------------- | ------------------------------------------ |
+| `npm run start`         | Inicia a aplicação                         |
+| `npm run start:dev`     | Inicia em modo watch                       |
+| `npm run start:prod`    | Executa o build de produção                |
+| `npm run build`         | Compila o projeto                          |
+| `npm run lint`          | Executa o ESLint com `--fix`               |
+| `npm run format`        | Formata o código com Prettier              |
+| `npm run migration:run` | Aplica migrations pendentes                |
+| `npm run seed`          | Roda os seeds do banco                     |
+| `npm run test`          | Roda os testes unitários                   |
