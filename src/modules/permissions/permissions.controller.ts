@@ -14,10 +14,10 @@ import { PermissionService } from './permissions.service';
 import { plainToInstance } from 'class-transformer';
 import { CreatePermissionDTO } from './dto/create-permission.dto';
 import { UpdatePermissionDTO } from './dto/update-permission.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { PermissionGuard } from 'src/common/guards/permission.guard';
 import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
-@UseGuards(AuthGuard('jwt'), PermissionGuard)
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+@UseGuards(JwtGuard, PermissionGuard)
 @Controller('permissions')
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
@@ -49,11 +49,7 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions(
-    'read:permission',
-    'update:permission',
-    'create:permission',
-  )
+  @RequirePermissions('update:permission')
   @Patch(':id')
   async updateOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -64,11 +60,7 @@ export class PermissionController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions(
-    'read:permission',
-    'update:permission',
-    'create:permission',
-  )
+  @RequirePermissions('delete:permission')
   @Delete(':id')
   async deleteOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.permissionService.deleteOne(id);

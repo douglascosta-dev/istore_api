@@ -17,10 +17,10 @@ import { FindAddressQueryDTO } from './dto/find-address-query.dto';
 import { plainToInstance } from 'class-transformer';
 import { CreateAddressDTO } from './dto/create-adress.dto';
 import { UpdateAdressDTO } from './dto/update-adress.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { PermissionGuard } from 'src/common/guards/permission.guard';
 import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
-@UseGuards(AuthGuard('jwt'), PermissionGuard)
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+@UseGuards(JwtGuard, PermissionGuard)
 @Controller('address')
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
@@ -48,7 +48,7 @@ export class AddressController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('create:address')
   @Post()
   async createOne(@Body() body: CreateAddressDTO): Promise<AddressResponse> {
     const address = await this.addressService.createOne(body);
@@ -56,7 +56,7 @@ export class AddressController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions('read:address', 'update:address', 'create:address')
+  @RequirePermissions('update:address')
   @Patch(':id')
   async updateOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -67,7 +67,7 @@ export class AddressController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions('read:address', 'delete:address', 'update:address')
+  @RequirePermissions('delete:address')
   @Delete(':id')
   async deleteOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.addressService.deleteOne(id);

@@ -18,11 +18,11 @@ import { RoleService } from './roles.service';
 import { plainToInstance } from 'class-transformer';
 import { UserResponse } from '../users/dto/user.response';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
-import { AuthGuard } from '@nestjs/passport';
 import { PermissionGuard } from 'src/common/guards/permission.guard';
 import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
-@UseGuards(AuthGuard('jwt'), PermissionGuard)
+@UseGuards(JwtGuard, PermissionGuard)
 @Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
@@ -63,7 +63,7 @@ export class RoleController {
       }),
     };
   }
-  @RequirePermissions('read:role', 'create:role')
+  @RequirePermissions('create:role')
   @Post()
   async createRole(@Body() body: CreateRoleDTO) {
     const role = await this.roleService.createOne(body);
@@ -71,7 +71,7 @@ export class RoleController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions('read:role', 'update:role', 'create:role')
+  @RequirePermissions('update:role')
   @Patch(':id')
   async updateRole(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -82,7 +82,7 @@ export class RoleController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions('read:role', 'delete:role')
+  @RequirePermissions('delete:role')
   @Delete(':id')
   async removeRole(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.roleService.deleteOne(id);

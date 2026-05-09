@@ -18,12 +18,12 @@ import { plainToInstance } from 'class-transformer';
 import { CreateCellphoneDTO } from './dto/create-cellphone.dto';
 import { UpdateCellphoneDTO } from './dto/update-cellphone.dto';
 import { CellphoneUserResponse } from './dto/cellphone-users.response';
-import { AuthGuard } from '@nestjs/passport';
 import { PermissionGuard } from 'src/common/guards/permission.guard';
 import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
 @Controller('cellphones')
-@UseGuards(AuthGuard('jwt'), PermissionGuard)
+@UseGuards(JwtGuard, PermissionGuard)
 export class CellphoneController {
   constructor(private readonly cellphoneService: CellphoneService) {}
   @RequirePermissions('read:cellphone')
@@ -39,8 +39,7 @@ export class CellphoneController {
       }),
     };
   }
-  @RequirePermissions('read:cellphone')
-  @RequirePermissions('read:user')
+  @RequirePermissions('read:cellphone', 'read:user')
   @Get('/users')
   async findOneWithUsers(
     @Query() query: FindCellphoneQueryDTO,

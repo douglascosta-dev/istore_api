@@ -18,10 +18,11 @@ import { FindUserQueryDTO } from './dto/find-user-query.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { CreateClientUserDTO } from './create-client-user.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { PermissionGuard } from 'src/common/guards/permission.guard';
 import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
-@UseGuards(AuthGuard('jwt'), PermissionGuard)
+import { JwtGuard } from 'src/common/guards/jwt.guard';
+import { Public } from 'src/common/decorators/public-permission.decorator';
+@UseGuards(JwtGuard, PermissionGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -56,7 +57,7 @@ export class UserController {
       excludeExtraneousValues: true,
     });
   }
-
+  @Public()
   @Post('client')
   async createClient(@Body() body: CreateClientUserDTO): Promise<UserResponse> {
     const user = await this.userService.createClient(body);
