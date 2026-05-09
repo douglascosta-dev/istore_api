@@ -10,6 +10,6 @@ import { Permission } from '../permissions/entities/permission.entity';
   imports: [TypeOrmModule.forFeature([Role, Permission, RolePermission])],
   controllers: [RolePermissionController],
   providers: [RolePermissionService],
-  exports: [],
+  exports: [RolePermissionService],
 })
 export class RolePermissionModule {}

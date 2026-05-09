@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
 import { CellphoneResponse } from './dto/cellphone.response';
@@ -17,10 +18,15 @@ import { plainToInstance } from 'class-transformer';
 import { CreateCellphoneDTO } from './dto/create-cellphone.dto';
 import { UpdateCellphoneDTO } from './dto/update-cellphone.dto';
 import { CellphoneUserResponse } from './dto/cellphone-users.response';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
+import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
 @Controller('cellphones')
+@UseGuards(JwtGuard, PermissionGuard)
 export class CellphoneController {
   constructor(private readonly cellphoneService: CellphoneService) {}
+  @RequirePermissions('read:cellphone')
   @Get()
   async findAll(
     @Query() query: FindCellphoneQueryDTO,
@@ -33,7 +39,7 @@ export class CellphoneController {
       }),
     };
   }
-
+  @RequirePermissions('read:cellphone', 'read:user')
   @Get('/users')
   async findOneWithUsers(
     @Query() query: FindCellphoneQueryDTO,
@@ -41,6 +47,7 @@ export class CellphoneController {
     return await this.cellphoneService.findAllWithUsers(query);
   }
 
+  @RequirePermissions('read:cellphone')
   @Get(':id')
   async findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -50,7 +57,7 @@ export class CellphoneController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('create:cellphone')
   @Post()
   async createdOne(
     @Body() body: CreateCellphoneDTO,
@@ -61,6 +68,7 @@ export class CellphoneController {
     });
   }
 
+  @RequirePermissions('update:cellphone')
   @Patch(':id')
   async updateOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -72,6 +80,7 @@ export class CellphoneController {
     });
   }
 
+  @RequirePermissions('delete:cellphone')
   @Delete(':id')
   async deleteOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.cellphoneService.deleteOne(id);

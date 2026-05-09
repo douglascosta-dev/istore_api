@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UpdateRoleDTO } from './dto/update-role.dto';
 import { CreateRoleDTO } from './dto/create-role.dto';
@@ -17,10 +18,15 @@ import { RoleService } from './roles.service';
 import { plainToInstance } from 'class-transformer';
 import { UserResponse } from '../users/dto/user.response';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
+import { PermissionGuard } from 'src/common/guards/permission.guard';
+import { RequirePermissions } from 'src/common/decorators/role-permission.decorator';
+import { JwtGuard } from 'src/common/guards/jwt.guard';
 
+@UseGuards(JwtGuard, PermissionGuard)
 @Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
+  @RequirePermissions('read:role')
   @Get()
   async findAll(
     @Query() query: FindRolesQueryDTO,
@@ -33,7 +39,7 @@ export class RoleController {
       }),
     };
   }
-
+  @RequirePermissions('read:role')
   @Get(':id')
   async findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -43,7 +49,7 @@ export class RoleController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('read:role', 'read:user')
   @Get(':id/users')
   async findOneWithUsers(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -57,7 +63,7 @@ export class RoleController {
       }),
     };
   }
-
+  @RequirePermissions('create:role')
   @Post()
   async createRole(@Body() body: CreateRoleDTO) {
     const role = await this.roleService.createOne(body);
@@ -65,7 +71,7 @@ export class RoleController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('update:role')
   @Patch(':id')
   async updateRole(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -76,7 +82,7 @@ export class RoleController {
       excludeExtraneousValues: true,
     });
   }
-
+  @RequirePermissions('delete:role')
   @Delete(':id')
   async removeRole(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.roleService.deleteOne(id);

@@ -119,4 +119,18 @@ export class RolePermissionService {
   async deleteOne(id: string) {
     return await this.rolePermissionRepository.delete(id);
   }
+
+  async hasPermission(
+    roleName: string,
+    permissionName: string,
+  ): Promise<boolean> {
+    const rolePermission = await this.rolePermissionRepository.findOne({
+      where: {
+        role: { name: roleName },
+        permission: { name: permissionName },
+      },
+      relations: ['roles', 'permissions'],
+    });
+    return !!rolePermission;
+  }
 }

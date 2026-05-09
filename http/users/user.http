@@ -10,6 +10,7 @@ GET {{baseUrl}}/users
 # @name findOne
 GET {{baseUrl}}/users/973c2870-9b28-49f9-9357-1b4cd107eff8
 
+
 ### UserController
 # @name createOne
 POST {{baseUrl}}/users
@@ -41,6 +42,7 @@ Content-Type: application/json
   "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
 }
 
+
 ### UserController
 # @name createOne
 POST {{baseUrl}}/users/client
@@ -48,8 +50,8 @@ Content-Type: application/json
 
 {
   "firstName": "Letícia",
-  "lastName": "Macedo",
-  "email": "leticiamacedo@gmail.com",
+  "lastName": "Teste",
+  "email": "leticia@gmail.com",
   "cellphones": [
     {
       "number": "31991111111"
@@ -58,8 +60,8 @@ Content-Type: application/json
   "address": [
     {
       "zipcode": "35701306",
-      "street": "Rua Guarapuava",
-      "number": 313,
+      "street": "Rua Teste",
+      "number": 001,
       "complement": "",
       "neighborhood": "Aeroporto",
       "city": "Sete Lagoas",
@@ -68,8 +70,7 @@ Content-Type: application/json
     }
   ],
   "cpf": "13222222222",
-  "password": "123456",
-  "roleId": "1cc931c0-3cbf-4be8-8d39-54cfe29234c5"
+  "password": "123456"
 }
 
 
