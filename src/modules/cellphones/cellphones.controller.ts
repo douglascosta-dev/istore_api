@@ -26,7 +26,7 @@ import { RequirePermissions } from 'src/common/decorators/role-permission.decora
 @UseGuards(AuthGuard('jwt'), PermissionGuard)
 export class CellphoneController {
   constructor(private readonly cellphoneService: CellphoneService) {}
-  @RequirePermissions('read_cellphone')
+  @RequirePermissions('read:cellphone')
   @Get()
   async findAll(
     @Query() query: FindCellphoneQueryDTO,
@@ -39,8 +39,8 @@ export class CellphoneController {
       }),
     };
   }
-  @RequirePermissions('read_cellphone')
-  @RequirePermissions('read_user')
+  @RequirePermissions('read:cellphone')
+  @RequirePermissions('read:user')
   @Get('/users')
   async findOneWithUsers(
     @Query() query: FindCellphoneQueryDTO,
@@ -48,7 +48,7 @@ export class CellphoneController {
     return await this.cellphoneService.findAllWithUsers(query);
   }
 
-  @RequirePermissions('read_cellphone')
+  @RequirePermissions('read:cellphone')
   @Get(':id')
   async findOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -58,7 +58,7 @@ export class CellphoneController {
       excludeExtraneousValues: true,
     });
   }
-  @RequirePermissions('create_cellphone')
+  @RequirePermissions('create:cellphone')
   @Post()
   async createdOne(
     @Body() body: CreateCellphoneDTO,
@@ -69,7 +69,7 @@ export class CellphoneController {
     });
   }
 
-  @RequirePermissions('update_cellphone')
+  @RequirePermissions('update:cellphone')
   @Patch(':id')
   async updateOne(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -81,7 +81,7 @@ export class CellphoneController {
     });
   }
 
-  @RequirePermissions('delete_cellphone')
+  @RequirePermissions('delete:cellphone')
   @Delete(':id')
   async deleteOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return await this.cellphoneService.deleteOne(id);
