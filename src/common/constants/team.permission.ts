@@ -35,4 +35,10 @@ export const TeamPermissions: string[] = [
   'update:ticket',
   'delete:ticket',
   'answer:ticket',
+
+  /* IMAGES */
+  'upload:image',
+  'read:image',
+  'update:image',
+  'delete:image',
 ];

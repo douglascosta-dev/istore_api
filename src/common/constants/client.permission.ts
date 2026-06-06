@@ -32,4 +32,10 @@ export const ClientPermissions: string[] = [
   /* FINANCE */
   'read:finance',
   'update:finance',
+
+  /* IMAGES */
+  'upload:image',
+  'read:image',
+  'update:image',
+  'delete:image',
 ];

@@ -25,4 +25,10 @@ export const SellerPermissions: string[] = [
   'approve:order',
   'finish:order',
   'cancel:order',
+
+  /* IMAGES */
+  'upload:image',
+  'read:image',
+  'update:image',
+  'delete:image',
 ];

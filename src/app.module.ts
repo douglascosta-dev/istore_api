@@ -10,6 +10,7 @@ import { AddressModule } from './modules/address/address.module';
 import { PermissionModule } from './modules/permissions/permissions.module';
 import { RolePermissionModule } from './modules/role_permissions/role-permission.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ImageModule } from './modules/images/images.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AuthModule } from './modules/auth/auth.module';
     PermissionModule,
     RolePermissionModule,
     AuthModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
