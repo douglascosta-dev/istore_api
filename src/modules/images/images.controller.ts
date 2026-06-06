@@ -59,6 +59,19 @@ export class ImageController {
   @Post('upload/:type')
   @UseInterceptors(
     FileInterceptor('file', {
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.startsWith('image/')) {
+          return callback(
+            new HttpException(
+              'Apenas imagens são permitidas',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+          );
+        }
+
+        callback(null, true);
+      },
       storage: diskStorage({
         destination: (req, file, callback) => {
           const type = req.params.type;
@@ -91,6 +104,19 @@ export class ImageController {
   @Post('upload-batch/:type')
   @UseInterceptors(
     FilesInterceptor('files', 10, {
+      fileFilter: (req, file, callback) => {
+        if (!file.mimetype.startsWith('image/')) {
+          return callback(
+            new HttpException(
+              'Apenas imagens são permitidas',
+              HttpStatus.BAD_REQUEST,
+            ),
+            false,
+          );
+        }
+
+        callback(null, true);
+      },
       storage: diskStorage({
         destination: (req, file, callback) => {
           const type = req.params.type;
