@@ -26,12 +26,12 @@ import { RequirePermissions } from 'src/common/decorators/role-permission.decora
 import { Image } from './entities/image.entity';
 import { PaginatedResponse } from 'src/common/interfaces/paginated-response.interface';
 import { FindImageQueryDTO } from './dto/find-image-query.dto';
+import { Public } from 'src/common/decorators/public-permission.decorator';
 @UseGuards(JwtGuard, PermissionGuard)
 @Controller('images')
 export class ImageController {
   constructor(private readonly imageService: ImageService) {}
-
-  @RequirePermissions('read:image')
+  @Public()
   @Get()
   async findAll(
     @Query() query: FindImageQueryDTO,
@@ -46,7 +46,7 @@ export class ImageController {
     };
   }
 
-  @RequirePermissions('read:image')
+  @Public()
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ImageResponse> {
     const image: Image = await this.imageService.findOne(id);
