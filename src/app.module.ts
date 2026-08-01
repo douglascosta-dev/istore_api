@@ -11,6 +11,7 @@ import { PermissionModule } from './modules/permissions/permissions.module';
 import { RolePermissionModule } from './modules/role_permissions/role-permission.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ImageModule } from './modules/images/images.module';
+import { CategoryModule } from './modules/categories/categories.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ImageModule } from './modules/images/images.module';
     RolePermissionModule,
     AuthModule,
     ImageModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
