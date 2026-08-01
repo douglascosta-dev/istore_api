@@ -7,6 +7,8 @@ export class CategoryResponse {
   @Expose()
   readonly name: string;
   @Expose()
+  enabled: boolean;
+  @Expose()
   @Type(() => ImageResponse)
   readonly image: ImageResponse;
 }
