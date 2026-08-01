@@ -97,6 +97,6 @@ export class ImageService {
         'Nenhuma imagem encontrada',
         HttpStatus.NOT_FOUND,
       );
-    await this.imageRepository.softDelete(image);
+    await this.imageRepository.remove(image);
   }
 }
