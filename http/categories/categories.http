@@ -1,0 +1,61 @@
+@baseUrl = http://localhost:3000
+### CategoryController
+
+# @name findAll
+### Busca e retorna todas as categorias
+GET {{baseUrl}}/categories
+
+# @name findOne
+### Busca e retorna uma categoria pelo UUID
+GET {{baseUrl}}/categories/7b3f9228-bb8a-4239-8058-156df9bd3707
+
+# @name createOne
+### Cria uma categoria sem imagem
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "name":"Categoria: Sem Imagem",
+    "enabled":true,
+    "order":1
+}
+
+# @name createOne
+### Cria uma categoria com imagem
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "name":"Categoria: Com Imagem",
+    "enabled":true,
+    "order":1,
+    "imagemId":"7509575a-2797-452d-a51b-9a92747b49dc"
+}
+
+# @name createOne
+### Cria uma categoria para ser atualizada
+POST {{baseUrl}}/categories
+Content-Type: application/json
+
+{
+    "name":"Coloque qualquer nome para atualizar",
+    "enabled":true,
+    "order":1
+}
+
+# @name updateOne
+### Atualiza o nome,status ou imagem de uma categoria.
+PATCH {{baseUrl}}/categories/a2fac92a-2553-44bf-95af-9395e9a56f05
+Content-Type: application/json
+
+{
+    "name":"Categoria: Nome Alterado e Status Desabilitado com Imagem",
+    "enabled":false,
+    "order":1,
+    "imageId":"7509575a-2797-452d-a51b-9a92747b49dc"
+    
+}
+
+# @name updateOne
+### Remove uma categoria
+DELETE {{baseUrl}}/categories/a2fac92a-2553-44bf-95af-9395e9a56f05
