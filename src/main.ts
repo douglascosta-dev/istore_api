@@ -15,6 +15,7 @@ async function bootstrap() {
     .setTitle('iStore API')
     .setDescription('API para gestão de E-commerce de eletrônicos')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
