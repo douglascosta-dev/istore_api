@@ -40,6 +40,8 @@ API REST para gestão de e-commerce de eletrônicos, construída com [NestJS](ht
 - Controle de acesso baseado em **roles** (`admin`, `team`, `client`) e **permissions** granulares (`create:user`, `read:user`, etc.)
 - Guards de JWT e de permissões, com decorator `@Public()` para rotas abertas
 - CRUD de usuários, endereços, telefones, roles, permissions e role-permissions
+- Gestão de categorias com ordenação, status e vínculo de imagem
+- Upload de imagens únicas e em lote (`multipart/form-data`) para categorias, produtos e tickets
 - Cadastro público de cliente (`POST /users/client`)
 - Paginação padronizada via helper e DTOs reutilizáveis
 - Migrations e seeds via TypeORM CLI
@@ -54,7 +56,7 @@ src/
 ├── common/
 │   ├── constants/        # Listas de permissões por role (admin, team, seller, client, dev)
 │   ├── decorators/       # @Public, @RequirePermissions
-│   ├── dto/              # PaginationDTO
+│   ├── dto/              # PaginationDTO, PaginationMetaDTO
 │   ├── guards/           # JwtGuard, PermissionGuard
 │   ├── helpers/          # paginação, role-permission
 │   ├── interfaces/       # PaginatedResponse, PaginationMeta
@@ -69,8 +71,10 @@ src/
     ├── roles/
     ├── permissions/
     ├── role_permissions/
+    ├── categories/
     ├── cellphones/
-    └── address/
+    ├── address/
+    └── images/           # upload de imagens única e em lote
 ```
 
 ## Pré-requisitos
@@ -150,19 +154,34 @@ A API sobe por padrão em `http://localhost:3000`.
 
 ## Documentação da API
 
-Após iniciar o servidor, a documentação Swagger fica disponível em:
+### Swagger / OpenAPI (Interativo)
+
+A documentação interativa gerada pelo Swagger com todos os endpoints, DTOs, schemas e códigos de retorno HTTP fica disponível em:
 
 ```
 http://localhost:3000/api
 ```
 
-A pasta [http/](http/) contém arquivos `.http` (REST Client) com exemplos de requisições para cada módulo:
+#### Como testar endpoints protegidos no Swagger UI:
+> ℹ️ O acesso à página do Swagger é livre e público para consulta. A autenticação abaixo é necessária apenas ao executar requisições em rotas protegidas diretamente pela interface.
+
+1. Realize o login em `POST /auth/login` informando e-mail e senha para obter o `accessToken`.
+2. Clique no botão **Authorize** (com ícone de cadeado no canto superior direito da página do Swagger).
+3. No campo de valor, insira o token JWT gerado e confirme clicando em **Authorize**.
+4. Agora você pode clicar em **"Try it out"** e testar as rotas protegidas com seu token ativo.
+
+---
+
+### Requisições REST Client (.http)
+
+A pasta [http/](http/) também contém arquivos `.http` para testes rápidos via extensão REST Client do VS Code:
 
 - [http/auth/auth.http](http/auth/auth.http)
 - [http/users/user.http](http/users/user.http)
 - [http/roles/role.http](http/roles/role.http)
 - [http/permissions/permission.http](http/permissions/permission.http)
 - [http/role_permissions/role_permission.http](http/role_permissions/role_permission.http)
+- [http/categories/categories.http](http/categories/categories.http)
 - [http/cellphones/cellphones.http](http/cellphones/cellphones.http)
 - [http/address/address.http](http/address/address.http)
 
